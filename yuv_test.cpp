@@ -38,21 +38,22 @@ int main(){
 	for(int i = 0; i < 256 * 3 * 128; i++){
 		uint_input valIn;
 		valIn.data = rgb[i];
-		//cout << "RGB = " << rgb[i] << " valIn.data = " << valIn.data << endl;
 		rgbStream << valIn;
 	}
 
-	hls::stream<uint_output> outStream;
-	yuv(rgbStream, outStream);
+	hls::stream<uint_output> yStream;
+	hls::stream<uint_output> cbStream;
+	hls::stream<uint_output> crStream;
+	yuv(rgbStream, yStream, cbStream, crStream);
 
-	while(!outStream.empty()){
+	while(!yStream.empty()){
 		uint_output valOutY;
 		uint_output valOutCb;
 		uint_output valOutCr;
-		outStream.read(valOutY);
-		outStream.read(valOutCb);
-		outStream.read(valOutCr);
-		cout << "Y: " << valOutY.data << " " << " Cb: " << valOutCb.data << " Cr: " << valOutCr.data << endl;
+		yStream.read(valOutY);
+		cbStream.read(valOutCb);
+		crStream.read(valOutCr);
+		cout << "Y: " << valOutY.data << " Cb: " << valOutCb.data << " Cr: " << valOutCr.data << endl;
 	}
 
 	cout << endl << "################################################################################################" << endl;
